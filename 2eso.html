@@ -3,112 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrenador de Tecnologia - 3r ESO</title>
+    <title>Entrenador de Tecnologia - 2n ESO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Estructura flexible per a Google Sites */
-        html, body { height: 100%; margin: 0; overflow-x: hidden; }
-        .app-container { min-height: 100vh; display: flex; flex-direction: column; }
-        
-        .card-flip { perspective: 1000px; flex-grow: 1; display: flex; width: 100%; }
+        :root {
+            --app-height: 100%;
+        }
+        body {
+            height: 100vh;
+            height: -webkit-fill-available;
+            overflow: hidden;
+        }
+        .card-flip { perspective: 2000px; }
         .card-inner { 
-            transition: transform 0.6s; 
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
             transform-style: preserve-3d; 
-            width: 100%; 
-            display: flex;
-            position: relative;
         }
         .is-flipped { transform: rotateY(180deg); }
-        
         .card-front, .card-back { 
             backface-visibility: hidden; 
             position: absolute; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            display: flex; flex-direction: column;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
         }
         .card-back { transform: rotateY(180deg); }
-
-        /* Scrollbar personalitzat per a les opcions i explicacions */
-        .custom-scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: #10b981 transparent; }
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background-color: #10b981; border-radius: 10px; }
+        
+        /* Animació suau */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(3deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        .float-icon { animation: float 4s ease-in-out infinite; }
+        
+        /* Ajustos per a pantalles petites amb molt contingut */
+        .scroll-safe {
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
     </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-900">
 
-    <div id="app" class="app-container p-3 md:p-6">
+    <div id="app" class="h-screen flex flex-col p-4 md:p-6 lg:p-8 max-w-6xl mx-auto w-full">
         
         <!-- PANTALLA INICIAL -->
-        <div id="home-screen" class="bg-white rounded-3xl shadow-xl p-8 text-center border border-slate-100 max-w-4xl mx-auto my-auto">
-            <div class="bg-emerald-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-emerald-200">
-                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        <div id="home-screen" class="flex-grow flex flex-col items-center justify-center bg-white rounded-[3rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100 overflow-y-auto">
+            <div class="bg-green-600 w-20 h-20 md:w-28 md:h-28 rounded-3xl flex items-center justify-center mb-8 shadow-lg shadow-green-200 float-icon">
+                <svg class="w-10 h-10 md:w-14 md:h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
             </div>
-            <h1 class="text-3xl md:text-4xl font-black mb-4 tracking-tight text-slate-800 uppercase">Tecnologia 3r ESO</h1>
-            <p class="text-slate-500 text-lg mb-8 max-w-xl mx-auto italic">60 preguntes d'estudi preparades per a l'examen final.</p>
+            <h1 class="text-4xl md:text-6xl font-black mb-6 tracking-tight text-slate-800">Tecnologia 2n ESO</h1>
+            <p class="text-slate-500 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl">
+                Entrenament adaptatiu amb les 60 fitxes clau: energia, electricitat, mecanismes i estructures.
+            </p>
             
-            <button onclick="startQuiz()" class="w-full md:w-auto px-12 py-5 bg-emerald-600 text-white text-xl font-bold rounded-2xl hover:bg-emerald-700 transition-all shadow-xl hover:scale-105 transform">
+            <button onclick="startQuiz()" class="px-10 py-5 bg-green-600 text-white text-xl md:text-2xl font-bold rounded-2xl hover:bg-green-700 hover:scale-105 transition-all shadow-xl shadow-green-200 flex items-center gap-3">
                 Començar Repàs
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
             </button>
+            <div class="mt-8 flex gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                <span>60 PREGUNTES</span>
+                <span>•</span>
+                <span>DISSENY ADAPTATIU</span>
+            </div>
         </div>
 
         <!-- PANTALLA QUIZ -->
-        <div id="quiz-screen" class="hidden flex-grow flex flex-col max-w-5xl mx-auto w-full space-y-4">
-            <!-- Barra superior -->
-            <div class="flex items-center justify-between bg-white px-5 py-3 rounded-2xl shadow-sm border border-slate-100">
-                <button onclick="location.reload()" class="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400">
+        <div id="quiz-screen" class="hidden flex-grow flex flex-col gap-4 h-full overflow-hidden">
+            <!-- Header adaptable -->
+            <div class="flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100 shrink-0">
+                <button onclick="location.reload()" class="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                 </button>
                 <div class="text-center">
-                    <div id="quiz-progress-text" class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Pregunta 1 de 60</div>
-                    <div id="quiz-score-text" class="text-sm font-bold text-emerald-600">0 encerts</div>
+                    <div id="quiz-progress-text" class="text-[10px] font-black text-slate-400 uppercase tracking-wider">Pregunta 1 de 60</div>
+                    <div id="quiz-score-text" class="text-sm font-bold text-green-600">0 encerts</div>
                 </div>
                 <div class="w-10"></div>
             </div>
 
-            <!-- Progrés -->
-            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden shadow-inner">
-                <div id="progress-bar" class="bg-emerald-500 h-full transition-all duration-500" style="width: 1%"></div>
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden shrink-0">
+                <div id="progress-bar" class="bg-green-500 h-full transition-all duration-500" style="width: 0%"></div>
             </div>
 
-            <!-- Contenidor de la Carta -->
-            <div class="card-flip min-h-[450px]">
-                <div id="card-inner" class="card-inner">
+            <!-- Card Container que omple l'espai restant -->
+            <div class="card-flip flex-grow relative mb-2">
+                <div id="card-inner" class="card-inner h-full w-full">
                     
-                    <!-- Davant: Pregunta -->
-                    <div class="card-front bg-white p-6 md:p-10">
-                        <div id="question-category" class="text-xs font-black text-emerald-600 uppercase tracking-widest mb-4">CATEGORIA</div>
-                        <h2 id="question-text" class="text-xl md:text-2xl font-bold mb-6 leading-tight text-slate-800">Carregant...</h2>
+                    <!-- Front -->
+                    <div class="card-front bg-white rounded-[2.5rem] shadow-xl p-6 md:p-10 border border-slate-100">
+                        <div id="question-category" class="text-[10px] font-black text-green-600 uppercase tracking-[0.2em] mb-4">Bloc 1</div>
+                        <div class="flex-grow flex items-center justify-center overflow-y-auto mb-6 scroll-safe">
+                            <h2 id="question-text" class="text-xl md:text-3xl font-bold leading-tight text-slate-800 text-center">Carregant pregunta...</h2>
+                        </div>
                         
-                        <div id="options-container" class="space-y-3 flex-grow custom-scroll pr-2">
-                            <!-- Opcions -->
+                        <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3 shrink-0">
+                            <!-- Opcions dinàmiques -->
                         </div>
                     </div>
 
-                    <!-- Darrere: Feedback -->
-                    <div class="card-back bg-slate-900 p-6 md:p-10 text-white">
-                        <div id="feedback-header" class="flex items-center gap-4 mb-6">
-                            <div id="feedback-icon" class="w-12 h-12 rounded-2xl flex items-center justify-center"></div>
+                    <!-- Back -->
+                    <div class="card-back bg-slate-900 rounded-[2.5rem] shadow-xl p-6 md:p-10 border border-slate-800 text-white">
+                        <div id="feedback-header" class="flex items-center gap-4 mb-4 shrink-0">
+                            <div id="feedback-icon" class="w-12 h-12 rounded-xl flex items-center justify-center"></div>
                             <h3 id="feedback-title" class="text-2xl font-black">Resposta</h3>
                         </div>
                         
-                        <div class="flex-grow space-y-4 custom-scroll pr-2">
-                            <div class="bg-slate-800/80 p-5 rounded-2xl border border-slate-700">
+                        <div class="flex-grow flex flex-col lg:grid lg:grid-cols-2 gap-4 overflow-hidden">
+                            <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 flex flex-col justify-center shrink-0 lg:shrink">
                                 <div class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest">Resposta correcta:</div>
-                                <div id="correct-answer-display" class="text-lg font-bold text-emerald-400"></div>
+                                <div id="correct-answer-display" class="text-lg md:text-xl font-bold text-green-400"></div>
                             </div>
 
-                            <div class="bg-slate-800/30 p-5 rounded-2xl">
-                                <div class="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest">Explicació:</div>
-                                <p id="explanation-display" class="text-base text-slate-300 leading-relaxed italic"></p>
+                            <div class="p-2 overflow-y-auto scroll-safe flex-grow">
+                                <div class="text-[10px] font-black text-slate-400 uppercase mb-3 tracking-widest">Per què?</div>
+                                <p id="explanation-display" class="text-base md:text-lg text-slate-300 leading-relaxed font-medium"></p>
                             </div>
                         </div>
 
-                        <button onclick="nextQuestion()" class="mt-6 w-full py-5 bg-white text-slate-900 text-lg font-black rounded-2xl hover:bg-emerald-50 transition-all flex items-center justify-center gap-3 shadow-lg">
-                            SEGÜENT PREGUNTA
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        <button onclick="nextQuestion()" class="mt-4 w-full py-4 bg-white text-slate-900 text-lg font-black rounded-xl hover:bg-slate-100 transition-all flex items-center justify-center gap-2 shrink-0 shadow-lg">
+                            CONTINUAR
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </button>
                     </div>
 
@@ -116,77 +135,90 @@
             </div>
         </div>
 
-        <!-- RESULTATS -->
-        <div id="results-screen" class="hidden bg-white rounded-3xl shadow-xl p-10 text-center border border-slate-100 max-w-2xl mx-auto my-auto w-full">
-            <h2 class="text-4xl font-black mb-6 text-slate-800">Has acabat!</h2>
-            <div class="bg-slate-50 rounded-3xl p-10 mb-8 border border-slate-100">
-                <div id="final-percentage" class="text-8xl font-black text-emerald-600 mb-2">0%</div>
-                <div id="final-score" class="text-xl font-bold text-slate-500 italic">0 de 60 encerts</div>
+        <!-- PANTALLA RESULTATS -->
+        <div id="results-screen" class="hidden flex-grow flex flex-col items-center justify-center bg-white rounded-[3rem] shadow-2xl p-8 md:p-12 text-center border border-slate-100 overflow-y-auto">
+            <div class="w-20 h-20 bg-yellow-100 rounded-3xl flex items-center justify-center mb-6 rotate-6 shadow-md">
+                <svg class="w-10 h-10 text-yellow-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
             </div>
-            <button onclick="location.reload()" class="w-full py-5 bg-emerald-600 text-white text-xl font-black rounded-2xl shadow-lg hover:bg-emerald-700 transition-all transform hover:scale-105">
-                REINTENTAR ENTRENAMENT
+            <h2 class="text-3xl md:text-5xl font-black mb-4 text-slate-800">Repàs Finalitzat!</h2>
+            <p class="text-slate-500 text-lg mb-8">Has completat el repàs de les 60 competències.</p>
+            
+            <div class="bg-slate-50 rounded-[2rem] p-8 md:p-10 mb-8 border border-slate-100 w-full max-w-sm">
+                <div id="final-percentage" class="text-6xl md:text-7xl font-black text-green-600 mb-2 tracking-tighter">0%</div>
+                <div id="final-score" class="text-lg font-bold text-slate-600">0 encerts de 60</div>
+            </div>
+
+            <button onclick="location.reload()" class="w-full max-w-sm py-5 bg-green-600 text-white text-xl font-black rounded-2xl hover:bg-green-700 transition-all shadow-xl shadow-green-100">
+                TORNAR A COMENÇAR
             </button>
         </div>
 
     </div>
 
     <script>
+        // DATABASE (60 PREGUNTES)
         const database = [
-            // BLOC 1: FONAMENTS
-            { q: "Quin és l'objectiu principal de la tecnologia?", cat: "Fonaments", opts: ["Satisfer les necessitats humanes", "Estudiar la biologia", "Fabricar joguines", "Escriure llibres"], ans: 0, exp: "La tecnologia utilitza el disseny i la construcció per resoldre problemes de la societat." },
-            { q: "Com s'anomena el mètode d'actuació que utilitza la tecnologia?", cat: "Fonaments", opts: ["Mètode científic", "Procés tecnològic", "Algorisme", "Cercle productiu"], ans: 1, exp: "És el camí que va des de la detecció d'una necessitat fins a la solució final." },
-            { q: "La _____ és una acció capaç de produir una deformació en un cos o modificar el seu estat.", cat: "Fonaments", opts: ["Massa", "Inèrcia", "Força", "Energia"], ans: 2, exp: "Les forces són les responsables de qualsevol canvi físic en els objectes." },
-            { q: "Dona un exemple de la força del vent actuant sobre un objecte.", cat: "Fonaments", opts: ["Un ventilador", "Les veles d'un vaixell", "Un imant", "Un motor elèctric"], ans: 1, exp: "El vent exerceix una pressió física sobre la superfície de la vela." },
-            { q: "Quina força fa caure l'aigua per una cascada?", cat: "Fonaments", opts: ["Magnetisme", "Força nuclear", "Gravetat", "Pressió"], ans: 2, exp: "La gravetat atrau tota la massa cap al centre de la Terra." },
-            
-            // BLOC 2: ESFORÇOS
-            { q: "Què és un esforç en el context de la física?", cat: "Esforços", opts: ["L'energia total", "Força aplicada per unitat de superfície", "El pes d'un objecte", "La fatiga"], ans: 1, exp: "L'esforç descriu com es distribueix una força dins del material." },
-            { q: "Anomena els cinc tipus de deformacions que pot causar un esforç.", cat: "Esforços", opts: ["Color, mida, forma, pes, volum", "Estirar, aixafar, corbar, torçar o tallar", "Calor, llum, so, tacte, olor", "Sòlid, líquid, gas, plasma, gel"], ans: 1, exp: "Tracció, compressió, flexió, torsió i cisallament." },
-            { q: "Quan estirem els extrems d'una peça, quin esforç pateix?", cat: "Esforços", opts: ["Compressió", "Tracció", "Flexió", "Torsió"], ans: 1, exp: "La tracció ocorre quan forces oposades intenten allargar un objecte." },
-            { q: "Quin esforç pateixen les columnes d'un edifici?", cat: "Esforços", opts: ["Tracció", "Compressió", "Torsió", "Cisallament"], ans: 1, exp: "Les columnes suporten el pes, tendint a ser aixafades (compressió)." },
-            { q: "Si intentem corbar un cos, estem aplicant un esforç de:", cat: "Esforços", opts: ["Flexió", "Torsió", "Tracció", "Cisallament"], ans: 0, exp: "La flexió és típica en bigues carregades." },
-            { q: "L'esforç que intenta torçar un cos girant els seus extrems és:", cat: "Esforços", opts: ["Flexió", "Torsió", "Compressió", "Cisallament"], ans: 1, exp: "Es produeix quan girem una clau o un eix." },
-            { q: "L'esforç de tall o cisallament es produeix quan:", cat: "Esforços", opts: ["Estirem el cos", "Dues forces oposades actuen en la mateixa secció", "L'escalfem", "Gira"], ans: 1, exp: "És l'esforç que fan unes tisores sobre el paper." },
-
-            // BLOC ESTRUCTURES
-            { q: "Què és una estructura?", cat: "Estructures", opts: ["Un decorat", "Conjunt d'elements per suportar càrregues", "Un material", "Una eina"], ans: 1, exp: "Serveix per mantenir la forma i resistir forces sense trencar-se." },
-            { q: "Què és el pes propi d'una estructura?", cat: "Estructures", opts: ["Càrrega del vent", "Pes dels seus propis elements", "Pes dels usuaris", "Pressió aire"], ans: 1, exp: "Són càrregues permanents com el pes de bigues o pilars." },
-            { q: "Quin element estructural se situa horitzontalment?", cat: "Estructures", opts: ["Pilar", "Biga", "Columna", "Fonament"], ans: 1, exp: "Les bigues transmeten les càrregues horitzontals als suports." },
-            { q: "Quina és la funció dels fonaments?", cat: "Estructures", opts: ["Decorar", "Transmetre el pes al terreny", "Protegir del vent", "Subjectar finestres"], ans: 1, exp: "Base que evita que l'edifici s'enfonsi." },
-            { q: "Per què es triangulen les estructures?", cat: "Estructures", opts: ["Per estètica", "Perquè el triangle és indeformable", "Per estalviar ferro", "Per fer-les rodones"], ans: 1, exp: "La triangulació dóna rigidesa a les estructures metàl·liques." },
-
-            // MECANISMES
-            { q: "Quin mecanisme transforma el moviment circular en rectilini?", cat: "Mecanismes", opts: ["Engranatges", "Pinyó-cremallera", "Rodes fricció", "Politges"], ans: 1, exp: "Molt usat en direccions de cotxes o portes correderes." },
-            { q: "En un sistema de politges, la corretja serveix per:", cat: "Mecanismes", opts: ["Frenar", "Transmetre el moviment entre rodes", "Greixar", "Mesurar"], ans: 1, exp: "Permet transmetre el gir a una distància." },
-            { q: "Què és la biela-manovella?", cat: "Mecanismes", opts: ["Un fre", "Transformador de circular a rectilini alternatiu", "Tipus de cargol", "Eina de tall"], ans: 1, exp: "És el sistema que mou els pistons dels motors." },
-            { q: "El vis sense fi - corona és un sistema:", cat: "Mecanismes", opts: ["Molt ràpid", "Irreversible", "Sense fricció", "Sempre multiplicador"], ans: 1, exp: "Redueix molt la velocitat i no es pot moure des de la sortida." },
-
-            // ELECTRICITAT I ELECTRÒNICA
-            { q: "La unitat de la tensió elèctrica és:", cat: "Electricitat", opts: ["Amperi", "Volt", "Ohm", "Watt"], ans: 1, exp: "El voltatge empeny els electrons pel circuit." },
-            { q: "La Llei d'Ohm estableix que:", cat: "Electricitat", opts: ["V = I / R", "V = I · R", "R = V · I", "I = V · R"], ans: 1, exp: "La tensió és igual a intensitat per resistència." },
-            { q: "Què és un circuit en sèrie?", cat: "Electricitat", opts: ["Receptors un darrere l'altre", "Receptors en paral·lel", "Sense piles", "Circuits separats"], ans: 0, exp: "Si un component falla, tot el circuit s'atura." },
-            { q: "Què fa una LDR?", cat: "Electrònica", opts: ["Detecta calor", "Varia la resistència amb la llum", "Genera llum", "És un interruptor"], ans: 1, exp: "A més llum, menys resistència ofereix." },
-            { q: "Un LED s'ha de connectar sempre amb:", cat: "Electrònica", opts: ["Dues piles", "Una resistència en sèrie", "Un interruptor de peu", "Cable d'acer"], ans: 1, exp: "La resistència limita el corrent per no cremar el LED." },
-
-            // PROGRAMARI (EXCEL)
-            { q: "Com s'anomena la intersecció d'una fila i una columna a Excel?", cat: "Excel", opts: ["Grup", "Cel·la", "Marge", "Punt"], ans: 1, exp: "Es designa amb lletra i número (ex: B4)." },
-            { q: "Totes les fórmules a Excel han de començar amb:", cat: "Excel", opts: ["El signe +", "El signe =", "El signe %", "La paraula SUMA"], ans: 1, exp: "L'igual indica a l'ordinador que ha de fer un càlcul." },
-            { q: "Què permet el full de càlcul de Google Drive?", cat: "Excel", opts: ["Jugar a videojocs", "Treball col·laboratiu en temps real", "No necessita internet", "Esborrar el disc dur"], ans: 1, exp: "Ideal per a projectes en grup." },
-
-            // CNC I CONTROL
-            { q: "Què signifiquen les sigles CNC?", cat: "Control", opts: ["Control de Naus", "Control Numèric per Ordinador", "Cerca de Canals", "Cable No Conductor"], ans: 1, exp: "Computer Numerical Control." },
-            { q: "Quins són els eixos de moviment en una màquina CNC?", cat: "Control", opts: ["A, B, C", "X, Y, Z", "N, S, E", "1, 2, 3"], ans: 1, exp: "Corresponen a les tres dimensions de l'espai." }
+            { q: "Quina tasca és característica de la fase d'execució?", cat: "Bloc 1", opts: ["Dissenyar plànols", "Donar forma i muntar les peces", "Avaluar el producte", "Cercar informació"], ans: 1, exp: "L'execució és la fase pràctica on es construeix l'objecte seguint el pla de treball." },
+            { q: "Com es defineix 'tècnica' en tecnologia?", cat: "Bloc 1", opts: ["Ciència aplicada", "Conjunt d'habilitats per aplicar un procediment", "Estudi del medi ambient", "Ús d'ordinadors"], ans: 1, exp: "La tècnica es refereix a la destresa específica (ex: soldar) dins del procés tecnològic." },
+            { q: "Què segueix a la fase de 'Recerca d'informació'?", cat: "Bloc 1", opts: ["Construcció", "Avaluació", "Realitzar l’avantprojecte", "Identificar el problema"], ans: 2, exp: "Un cop tenim la informació, el següent pas és començar a dissenyar la solució." },
+            { q: "Si el resultat de l'avaluació és negatiu, què hem de fer?", cat: "Bloc 1", opts: ["Llençar-ho tot", "Passar a un altre projecte", "Redissenyar i corregir errors", "Vendre el producte igualment"], ans: 2, exp: "El procés tecnològic és cíclic: si no funciona, cal tornar a la fase de disseny." },
+            { q: "Quin document planifica qui fa què i amb quines eines?", cat: "Bloc 1", opts: ["Memòria descriptiva", "Plànol de conjunt", "Full de procés o pla de treball", "Pressupost"], ans: 2, exp: "El full de procés organitza la fabricació pas a pas per ser eficients." },
+            { q: "Quina energia aprofita una central hidroelèctrica?", cat: "Bloc 2", opts: ["Energia solar", "Energia potencial de l'aigua", "Energia del vent", "Energia nuclear"], ans: 1, exp: "L'aigua emmagatzemada a certa alçada té energia potencial que es transforma en cinètica." },
+            { q: "Què s'obté en una central tèrmica cremant combustibles fòssils?", cat: "Bloc 2", opts: ["Fred", "Vapor d'aigua a pressió", "Llum directa", "Hidrogen"], ans: 1, exp: "La calor genera vapor que mou una turbina connectada a un alternador." },
+            { q: "Les fonts d'energia renovables són aquelles que:", cat: "Bloc 2", opts: ["S'esgoten aviat", "No es regeneren", "Es troben en quantitats il·limitades a la natura", "Són molt contaminants"], ans: 2, exp: "Sol, vent, aigua i biomassa són recursos que no s'esgoten." },
+            { q: "En una central nuclear, l'energia s'obté de la _____ dels àtoms d'urani.", cat: "Bloc 2", opts: ["Combustió", "Fissió", "Evaporació", "Mescla"], ans: 1, exp: "La fissió és el trencament del nucli de l'àtom, que allibera una quantitat enorme de calor." },
+            { q: "Quin component d'una central transforma el moviment en electricitat?", cat: "Bloc 2", opts: ["Caldera", "Turbina", "Alternador", "Transformador"], ans: 2, exp: "L'alternador (o generador) és la peça clau que converteix l'energia mecànica en elèctrica." },
+            { q: "La biomassa és una font d'energia d'origen:", cat: "Bloc 2", opts: ["Mineral", "Orgànic (animal o vegetal)", "Sintètic", "Extra-terrestre"], ans: 1, exp: "Restes de fusta, residus agrícoles o purins es poden cremar per obtenir energia." },
+            { q: "Quina funció té un transformador a la sortida d'una central?", cat: "Bloc 2", opts: ["Refredar l'aigua", "Elevar la tensió per al transport", "Aturar el corrent", "Mesurar el consum"], ans: 1, exp: "S'eleva el voltatge per reduir les pèrdues d'energia durant el transport a llargues distàncies." },
+            { q: "Per on circulen els electrons en un circuit elèctric?", cat: "Bloc 3", opts: ["Per l'aire", "Pels materials conductors", "Pels materials aïllants", "Per dins de les bombetes només"], ans: 1, exp: "Els conductors (com el coure) permeten el pas lliure dels electrons." },
+            { q: "La Llei d'Ohm estableix la relació entre:", cat: "Bloc 3", opts: ["Massa, pes i volum", "Voltatge, Intensitat i Resistència", "Temps i distància", "Calor i llum"], ans: 1, exp: "V = I · R és la fórmula fonamental de l'electrotècnia." },
+            { q: "Quin component controla el pas del corrent (obre/tanca)?", cat: "Bloc 3", opts: ["Pila", "Cable", "Elements de maniobra (interruptors)", "Motor"], ans: 2, exp: "Interruptors, commutadors i polsadors permeten gestionar el circuit." },
+            { q: "Si connectem tres bombetes en sèrie i una es fon:", cat: "Bloc 3", opts: ["Les altres brillen més", "Totes s'apaguen", "Només brilla la primera", "El circuit s'escalfa"], ans: 1, exp: "En sèrie només hi ha un camí; si es talla en qualsevol punt, el corrent s'atura." },
+            { q: "En un circuit en paral·lel, el voltatge a cada receptor és:", cat: "Bloc 3", opts: ["Diferent per a cada un", "La meitat del total", "El mateix que el de la pila", "Zero"], ans: 2, exp: "Tots els receptors estan connectats directament als borns de la font d'alimentació." },
+            { q: "La potència elèctrica es mesura en:", cat: "Bloc 3", opts: ["Amperis", "Volts", "Watts (W)", "Ohms"], ans: 2, exp: "P = V · I. Indica la quantitat d'energia consumida o generada per unitat de temps." },
+            { q: "Un fusible o un PIA serveixen per:", cat: "Bloc 3", opts: ["Il·luminar", "Protegir el circuit de sobrecàrregues", "Augmentar el voltatge", "Emmagatzemar energia"], ans: 1, exp: "Tallen el pas de corrent si la intensitat és perillosa per a la instal·lació." },
+            { q: "Què és un mecanisme?", cat: "Bloc 4", opts: ["Un tipus d'energia", "Conjunt d'elements que transformen moviments i forces", "Una eina manual", "Un cable elèctric"], ans: 1, exp: "Transmeten o transformen el moviment des d'un motor fins a un receptor." },
+            { q: "Les palanques són màquines simples basades en un punt de suport.", cat: "Bloc 4", opts: ["Vertader", "Fals"], ans: 0, exp: "Permeten moure pesos grans amb poca força gràcies a la llei de la palanca." },
+            { q: "En una palanca de 1r grau, el punt de suport està:", cat: "Bloc 4", opts: ["En un extrem", "Entre la força i la resistència", "A dalt de tot", "No té punt de suport"], ans: 1, exp: "Com en un balancí o unes tisores." },
+            { q: "Una politja fixa serveix per:", cat: "Bloc 4", opts: ["Reduir la força a la meitat", "Canviar la direcció de la força", "Augmentar la velocitat", "No serveix per a res"], ans: 1, exp: "No estalvia força (F = R), però fa que sigui més còmode aixecar el pes." },
+            { q: "Un polispast és un conjunt de politges fixes i mòbils.", cat: "Bloc 4", opts: ["Vertader", "Fals"], ans: 0, exp: "Permet aixecar pesos molt grans reduint la força necessària." },
+            { q: "El mecanisme 'pinyó-cremallera' transforma un moviment:", cat: "Bloc 4", opts: ["Circular en circular", "Circular en lineal (i viceversa)", "Lineal en oscil·lant", "No transforma res"], ans: 1, exp: "S'usa en direccions de cotxes o portes de garatge correderes." },
+            { q: "Què fa un sistema de politges amb corretja si la motriu és petita i la conduïda gran?", cat: "Bloc 4", opts: ["Augmenta la velocitat", "Redueix la velocitat", "Manté la mateixa velocitat", "S'atura"], ans: 1, exp: "És un sistema reductor de velocitat." },
+            { q: "Els engranatges permeten transmetre grans forces sense lliscament.", cat: "Bloc 4", opts: ["Vertader", "Fals"], ans: 0, exp: "A diferència de les corretges, les dents impedeixen que el sistema patini." },
+            { q: "Una biela-manovella transforma el moviment circular en:", cat: "Bloc 4", opts: ["Giratori ràpid", "Lineal alternatiu (vaivé)", "Lineal continu", "Corbat"], ans: 1, exp: "Com en els pistons dels motors de cotxe." },
+            { q: "Quin mecanisme només permet el gir en un sentit?", cat: "Bloc 4", opts: ["Cama", "Carraca (Rinquet)", "Cigonyal", "Cargol sense fi"], ans: 1, exp: "El rinquet bloqueja el moviment en el sentit contrari." },
+            { q: "Quina és la funció d'una estructura?", cat: "Bloc 5", opts: ["Decorar", "Suportar pesos i mantenir la forma de l'objecte", "Fer l'objecte més pesat", "Conduir electricitat"], ans: 1, exp: "Resisteix les forces externes i el pes propi sense trencar-se ni deformar-se." },
+            { q: "Com s'anomena l'esforç que 'aixafa' una columna?", cat: "Bloc 5", opts: ["Tracció", "Flexió", "Compressió", "Torsió"], ans: 2, exp: "La compressió actua en l'eix de la peça intentant escurçar-la." },
+            { q: "Una biga treballa principalment a:", cat: "Bloc 5", opts: ["Torsió", "Flexió", "Tracció pura", "Cizallament"], ans: 1, exp: "La càrrega horitzontal fa que la biga es corbi lleugerament." },
+            { q: "Els tirants de ferro d'un pont penjat treballen a:", cat: "Bloc 5", opts: ["Compressió", "Tracció", "Flexió", "Gira"], ans: 1, exp: "Els cables o barres s'estiren per suportar el pes de la calçada." },
+            { q: "Per què s'utilitzen triangles en les estructures metàl·liques?", cat: "Bloc 5", opts: ["Per estètica", "Perquè és la figura geomètrica indeformable", "Perquè gasta menys material", "Perquè és més fàcil de pintar"], ans: 1, exp: "La triangulació impedeix que l'estructura es deformi lateralment." },
+            { q: "El formigó armat és una barreja de formigó i:", cat: "Bloc 5", opts: ["Plàstic", "Fusta", "Barres d'acer", "Vidre"], ans: 2, exp: "L'acer suporta la tracció i el formigó la compressió; junts són molt resistents." },
+            { q: "Què és un material sintètic?", cat: "Bloc 6", opts: ["Un extret de la natura directament", "Un creat per l'ésser humà (ex: plàstic)", "Un tipus de fusta", "Una roca"], ans: 1, exp: "Es fabriquen mitjançant reaccions químiques a partir de matèries primeres." },
+            { q: "Els plàstics termoplàstics es poden reciclar escalfant-los?", cat: "Bloc 6", opts: ["Sí, es tornen a fondre", "No, es cremen sempre", "Només un cop", "Només si són blancs"], ans: 0, exp: "Les seves cadenes de polímers permeten el reciclatge repetit mitjançant calor." },
+            { q: "La fusta és un material d'origen:", cat: "Bloc 6", opts: ["Mineral", "Vegetal", "Animal", "Sintètic"], ans: 1, exp: "S'obté del tronc dels arbres." },
+            { q: "Quin metall és el millor conductor elèctric d'ús comú?", cat: "Bloc 6", opts: ["Ferro", "Coure", "Alumini", "Plom"], ans: 1, exp: "El coure té una resistència molt baixa, ideal per a cables." },
+            { q: "L'oxidació és un problema típic dels metalls que contenen:", cat: "Bloc 6", opts: ["Or", "Ferro", "Alumini", "Coure"], ans: 1, exp: "El ferro reacciona amb l'oxigen i l'humitat formant òxid." },
+            { q: "Un material és 'fràgil' quand:", cat: "Bloc 6", opts: ["Es ratlla fàcilment", "Es trenca sense deformar-se prèviament", "Es pot estirar en fils", "Pesa molt"], ans: 1, exp: "Com el vidre o la ceràmica: no avisen abans de trencar-se." },
+            { q: "Quina és la propietat oposada a la fragilitat?", cat: "Bloc 6", opts: ["Duresa", "Tenacitat", "Elasticitat", "Conductivitat"], ans: 1, exp: "La tenacitat és la capacitat de resistir cops sense trencar-se." },
+            { q: "El dibuix tècnic utilitza regles de representació normalitzades.", cat: "Bloc 7", opts: ["Vertader", "Fals"], ans: 0, exp: "Permet que qualsevol tècnic del món entengui el plànol." },
+            { q: "Quina escala és de reducció?", cat: "Bloc 7", opts: ["1:1", "1:100", "2:1", "5:1"], ans: 1, exp: "1 unitat al paper representa 100 a la realitat (l'objecte és més gran que el dibuix)." },
+            { q: "El format DIN A4 mesura:", cat: "Bloc 7", opts: ["210 x 297 mm", "420 x 594 mm", "100 x 100 mm", "80 x 120 mm"], ans: 0, exp: "És el full estàndard que fem servir a classe." },
+            { q: "Quines són les 3 vistes principals d'un objecte?", cat: "Bloc 7", opts: ["Cara, darrere i costat", "Alçat, planta i perfil", "A dalt, a baix i al mig", "Fotos, dibuixos i croquis"], ans: 1, exp: "Aquestes vistes defineixen totalment la forma de l'objecte en 2D." },
+            { q: "L'alçat és la vista de l'objecte mirat des de:", cat: "Bloc 7", opts: ["Dalt", "Davant", "El costat esquerre", "Sota"], ans: 1, exp: "És la vista frontal o principal." },
+            { q: "La planta es dibuixa sempre _____ de l'alçat.", cat: "Bloc 7", opts: ["A sobre", "A sota", "A la dreta", "A l'esquerra"], ans: 1, exp: "Seguint el sistema europeu de representació." },
+            { q: "Les línies de cota serveixen per indicar:", cat: "Bloc 7", opts: ["El color", "Les mides de l'objecte", "El material", "El nom de l'autor"], ans: 1, exp: "L'acotació és imprescindible per poder fabricar la peça." },
+            { q: "Què és el maquinari (hardware)?", cat: "Bloc 8", opts: ["Els programes de l'ordinador", "La part física (circuits, teclat, etc.)", "Internet", "El ratolí només"], ans: 1, exp: "Tot el que pots tocar físicament d'un sistema informàtic." },
+            { q: "La memòria RAM serveix per:", cat: "Bloc 8", opts: ["Guardar fotos per sempre", "Emmagatzemar dades que s'estan usant en el moment", "Refredar la CPU", "Imprimir documents"], ans: 1, exp: "És una memòria volàtil i molt ràpida que s'esborra en apagar l'ordinador." },
+            { q: "Quin és el 'cervell' de l'ordinador?", cat: "Bloc 8", opts: ["Disc dur", "CPU (Microprocessador)", "Font d'alimentació", "Pantalla"], ans: 1, exp: "Processa totes les dades i executa les instruccions dels programes." },
+            { q: "Un sistema operatiu (com Windows o Linux) és:", cat: "Bloc 8", opts: ["Maquinari", "Logicial (Software)", "Un virus", "Un cable"], ans: 1, exp: "És el programa base que gestiona els recursos i permet l'ús d'altres programes." },
+            { q: "Què és un perifèric d'entrada?", cat: "Bloc 8", opts: ["Impressora", "Monitor", "Teclat", "Altavoc"], ans: 2, exp: "Permet introduir informació de l'usuari cap a l'ordinador." },
+            { q: "Un núvol (Cloud) permet guardar arxius a Internet.", cat: "Bloc 8", opts: ["Vertader", "Fals"], ans: 0, exp: "Permet l'accés des de qualsevol dispositiu amb connexió." },
+            { q: "Un esforç de compressió és el que pateixen les potes d'una cadira.", cat: "Bloc 9", opts: ["Vertader", "Fals"], ans: 0, exp: "El pes de la persona 'aixafa' verticalment les potes cap al terra." },
+            { q: "El 'Dossier Tècnic' és el conjunt de documents d'un projecte.", cat: "Bloc 9", opts: ["Vertader", "Fals"], ans: 0, exp: "Inclou memòria, plànols, pressupost i avaluació." },
+            { q: "En una llicència 'CompartirIgual', has de publicar la nova versió amb la mateixa llicència.", cat: "Bloc 9", opts: ["Vertader", "Fals"], ans: 0, exp: "Assegura que el coneixement derivat segueixi sent lliure." },
+            { q: "La canya de pescar és una palanca de 3r grau.", cat: "Bloc 9", opts: ["Vertader", "Fals"], ans: 0, exp: "La força es fa entre el punt de suport (mà de dalt) i la resistència (peix)." },
+            { q: "Un mecanisme de cargol sense fi i roda és reversible.", cat: "Bloc 9", opts: ["Vertader", "Fals"], ans: 1, exp: "No és reversible: el cargol pot moure la roda, però la roda no pot moure el cargol." }
         ];
-
-        // Omplim fins a 60 automàticament per assegurar la quantitat exacta
-        while (database.length < 60) {
-            const original = database[database.length % 20];
-            database.push({
-                ...original,
-                q: `[Repàs] ${original.q}`,
-                exp: `Recordatori: ${original.exp}`
-            });
-        }
 
         let currentIndex = 0;
         let score = 0;
@@ -201,6 +233,7 @@
         function loadQuestion() {
             const data = database[currentIndex];
             isFlipped = false;
+            
             document.getElementById('card-inner').classList.remove('is-flipped');
             document.getElementById('quiz-progress-text').innerText = `Pregunta ${currentIndex + 1} de ${database.length}`;
             document.getElementById('question-category').innerText = data.cat;
@@ -209,10 +242,11 @@
 
             const container = document.getElementById('options-container');
             container.innerHTML = '';
+            
             data.opts.forEach((opt, i) => {
                 const btn = document.createElement('button');
-                btn.className = "w-full text-left p-4 border-2 border-slate-100 rounded-2xl hover:border-emerald-400 hover:bg-emerald-50 transition-all font-bold flex justify-between items-center group text-base";
-                btn.innerHTML = `<span>${opt}</span><div class="w-6 h-6 border-2 border-slate-200 rounded-full group-hover:border-emerald-400 shrink-0 ml-4"></div>`;
+                btn.className = "w-full text-left p-4 md:p-5 border-2 border-slate-100 rounded-xl hover:border-green-400 hover:bg-green-50 transition-all font-bold flex justify-between items-center group text-base md:text-lg";
+                btn.innerHTML = `<span>${opt}</span><div class="w-6 h-6 border-2 border-slate-200 rounded-full group-hover:border-green-400 shrink-0 ml-4"></div>`;
                 btn.onclick = () => handleAnswer(i);
                 container.appendChild(btn);
             });
@@ -222,6 +256,7 @@
             if (isFlipped) return;
             const data = database[currentIndex];
             const correct = idx === data.ans;
+            
             if (correct) score++;
             document.getElementById('quiz-score-text').innerText = `${score} encerts`;
 
@@ -229,19 +264,20 @@
             const title = document.getElementById('feedback-title');
             
             if (correct) {
-                icon.className = "w-12 h-12 rounded-2xl flex items-center justify-center bg-emerald-500 text-white";
-                icon.innerHTML = '<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>';
-                title.innerText = "CORRECTE!";
-                title.className = "text-2xl font-black text-emerald-500 italic";
+                icon.className = "w-12 h-12 rounded-xl flex items-center justify-center bg-green-500 text-white shadow-lg";
+                icon.innerHTML = '<svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>';
+                title.innerText = "Molt bé!";
+                title.className = "text-2xl font-black text-green-500";
             } else {
-                icon.className = "w-12 h-12 rounded-2xl flex items-center justify-center bg-rose-500 text-white";
-                icon.innerHTML = '<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"></path></svg>';
-                title.innerText = "INCORRECTE";
-                title.className = "text-2xl font-black text-rose-500 italic";
+                icon.className = "w-12 h-12 rounded-xl flex items-center justify-center bg-red-500 text-white shadow-lg";
+                icon.innerHTML = '<svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>';
+                title.innerText = "Revisa-ho...";
+                title.className = "text-2xl font-black text-red-500";
             }
 
             document.getElementById('correct-answer-display').innerText = data.opts[data.ans];
             document.getElementById('explanation-display').innerText = data.exp;
+
             isFlipped = true;
             document.getElementById('card-inner').classList.add('is-flipped');
         }
@@ -258,10 +294,17 @@
         function showResults() {
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('results-screen').classList.remove('hidden');
+            
             const perc = Math.round((score / database.length) * 100);
             document.getElementById('final-percentage').innerText = `${perc}%`;
-            document.getElementById('final-score').innerText = `${score} de ${database.length} encerts`;
+            document.getElementById('final-score').innerText = `${score} encerts de ${database.length} preguntes`;
         }
+
+        // Ajust alçada mòbil
+        window.addEventListener('resize', () => {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        });
     </script>
 </body>
 </html>
