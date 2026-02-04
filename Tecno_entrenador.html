@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenador de Competències Bàsiques - Tecnologia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+        body { font-family: 'Outfit', sans-serif; }
+        .correct { border-color: #10b981; background-color: #ecfdf5; color: #065f46; }
+        .incorrect { border-color: #ef4444; background-color: #fef2f2; color: #991b1b; }
+        .card-shadow { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white py-8 shadow-xl mb-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl md:text-4xl font-bold text-center italic tracking-tight">
+                🛠️ TECNO-ENTRENADOR
+            </h1>
+            <p class="text-center mt-2 text-blue-100 font-light max-w-2xl mx-auto">
+                Recull de 22 activitats competencials per a la preparació de les proves de Competències Bàsiques.
+            </p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 pb-20">
+        
+        <!-- Pantalla de Selecció -->
+        <div id="selector-screen" class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-8 border-b border-slate-300 pb-4">
+                <h2 class="text-2xl font-semibold text-slate-800">Selecciona un Bloc d'Entrenament</h2>
+                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase">22 Activitats</span>
+            </div>
+            <div id="activities-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Es genera dinàmicament -->
+            </div>
+        </div>
+
+        <!-- Pantalla de l'Activitat -->
+        <div id="activity-screen" class="hidden max-w-4xl mx-auto">
+            <button onclick="showSelector()" class="mb-6 flex items-center font-semibold text-blue-700 hover:text-blue-900 transition-all transform hover:-translate-x-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Tornar al llistat de blocs
+            </button>
+
+            <div id="activity-container" class="bg-white rounded-2xl card-shadow overflow-hidden border border-slate-200">
+                <!-- Contingut dinàmic -->
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Dades extretes i processades del PDF
+        const activitats = [
+            {
+                id: 1,
+                titol: "El Pont de Spaghetti",
+                context: "L'ajuntament d'una ciutat vol construir un nou pont de vianants per creuar un riu. S'organitza un concurs on els alumnes han de construir prototips a escala utilitzant només spaghetti i silicona termofusible per suportar 5 kg al centre.",
+                preguntes: [
+                    { p: "Com s'anomena la tècnica d'unir barres formant triangles per evitar deformacions?", opcions: ["Flexió composta", "Triangulació", "Fonamentació aèria", "Torsió mecànica"], correcta: 1, justificacio: "La triangulació és l'única forma geomètrica indeformable." },
+                    { p: "Quins esforços pateixen les barres superiors (aixafades) i les inferiors (estirades)?", opcions: ["Tracció i torsió", "Compressió i tracció", "Flexió i cizallament", "Gravetat i estabilitat"], correcta: 1, justificacio: "Aixafar és compressió i estirar és tracció." },
+                    { p: "Si l'escala és 1:50 i el pont real fa 20 m, quant fa el model?", opcions: ["40 cm", "20 cm", "10 cm", "4 cm"], correcta: 0, justificacio: "2000 cm / 50 = 40 cm." },
+                    { p: "Afirmació: 'Com més baix sigui el centre de gravetat, més estable és'.", opcions: ["Fals", "Vertader"], correcta: 1, justificacio: "L'estabilitat augmenta en apropar el pes a la base." },
+                    { p: "Quin element de protecció és obligatori en usar la pistola de silicona?", opcions: ["Bata de laboratori", "Ulleres de protecció", "Auriculars", "Cap de les anteriors"], correcta: 1, justificacio: "Cal protegir els ulls de possibles esquitxades de material calent." }
+                ]
+            },
+            {
+                id: 2,
+                titol: "Energies Renovables a l'Escola",
+                context: "Instal·lació solar fotovoltaica a la teulada per reduir la factura elèctrica i millorar la sostenibilitat del centre escolar.",
+                preguntes: [
+                    { p: "Quin tipus de corrent produeixen les plaques solars?", opcions: ["Corrent altern", "Corrent continu", "Corrent induït", "Corrent trifàsic"], correcta: 1, justificacio: "Les cèl·lules fotovoltaiques generen DC." },
+                    { p: "Quin aparell transforma el corrent de les plaques per usar-lo a l'escola?", opcions: ["Alternador", "Transformador", "Inversor", "Bateria"], correcta: 2, justificacio: "L'inversor passa de CC a CA." },
+                    { p: "L'energia solar és una font...", opcions: ["Exhaurible", "Contaminant", "Inesgotable/Renovable", "Nuclear"], correcta: 2, justificacio: "Prové del sol, recurs que no s'esgota." },
+                    { p: "Què mesura el kW·h que apareix a la factura?", opcions: ["Potència", "Tensió", "Energia consumida", "Resistència"], correcta: 2, justificacio: "L'energia és potència per temps." },
+                    { p: "Quin és l'impacte ambiental positiu principal?", opcions: ["Més soroll", "Reducció d'emissions CO2", "Escalfament del pati", "Augment del consum"], correcta: 1, justificacio: "No crema combustibles fòssils." }
+                ]
+            },
+            {
+                id: 3,
+                titol: "L'Habitatge Domòtic",
+                context: "Automatització d'una llar per millorar el confort i l'eficiència energètica mitjançant sensors i actuadors.",
+                preguntes: [
+                    { p: "Quin sensor detecta si hi ha algú a l'habitació?", opcions: ["LDR", "PIR (Infrarojos)", "NTC", "Final de cursa"], correcta: 1, justificacio: "El PIR detecta el moviment per calor corporal." },
+                    { p: "Un altaveu que avisa d'una alarma és un...", opcions: ["Sensor", "Processador", "Actuador", "Entrada"], correcta: 2, justificacio: "Transforma un senyal elèctric en una acció física (so)." },
+                    { p: "Què permet programar el comportament del sistema?", opcions: ["La bateria", "El microcontrolador (ex. Arduino)", "L'interruptor", "El cable de xarxa"], correcta: 1, justificacio: "És el 'cervell' que executa el codi." },
+                    { p: "Un sistema que tanca persianes si detecta molta llum és un sistema de...", opcions: ["Llaç obert", "Llaç tancat", "Control manual", "No és un sistema"], correcta: 1, justificacio: "Té realimentació (el sensor afecta l'acció)." },
+                    { p: "Quin estalvi permet la domòtica principalment?", opcions: ["Espai", "Aigua i energia", "Temps de son", "Mobiliari"], correcta: 1, justificacio: "Gestiona millor la calefacció i la il·luminació." }
+                ]
+            },
+            {
+                id: 4,
+                titol: "Materials i Reciclatge",
+                context: "Classificació i tractament de residus en una planta de compostatge i reciclatge local.",
+                preguntes: [
+                    { p: "A quin contenidor va un envàs de iogurt de plàstic?", opcions: ["Blau", "Gris", "Groc", "Verd"], correcta: 2, justificacio: "El groc és per a envasos lleugers." },
+                    { p: "Quina propietat permet als metalls ser convertits en fils?", opcions: ["Duresa", "Ductilitat", "Mal·leabilitat", "Fragilitat"], correcta: 1, justificacio: "Ductilitat és la capacitat de fer fils." },
+                    { p: "Què signifiquen les '3 R'?", opcions: ["Reutilitzar, Recollir, Rumiar", "Reduir, Reutilitzar, Reciclar", "Rentar, Reparar, Recomanar", "Res"], correcta: 1, justificacio: "És l'ordre de prioritat ambiental." },
+                    { p: "Quin material prové de la bauxita?", opcions: ["Ferro", "Plom", "Alumini", "Coure"], correcta: 2, justificacio: "L'alumini s'extreu d'aquest mineral." },
+                    { p: "Què és un polímer termoplàstic?", opcions: ["Que es fon amb la calor i es pot reciclar", "Que no es pot tornar a moldre", "Que és un metall", "Que és fusta"], correcta: 0, justificacio: "Es pot reescalfar i reformar diverses vegades." }
+                ]
+            },
+            {
+                id: 5,
+                titol: "Dibuix Tècnic: La Peça Industrial",
+                context: "Interpretació d'un plànol d'una peça mecànica per a la seva fabricació en un taller.",
+                preguntes: [
+                    { p: "Quines són les 3 vistes principals d'un objecte?", opcions: ["Davant, darrere i costat", "Alçat, planta i perfil", "Plànol, mapa i croquis", "Ombra, llum i volum"], correcta: 1, justificacio: "Són les projeccions ortogonals estàndard." },
+                    { p: "Què indica una línia discontínua en un dibuix tècnic?", opcions: ["Línia de tall", "Aresta oculta", "Eix de simetria", "Cota"], correcta: 1, justificacio: "Representa parts que no es veuen des d'aquella cara." },
+                    { p: "L'escala 2:1 significa que el dibuix és...", opcions: ["La meitat de gran que la realitat", "Igual que la realitat", "El doble de gran que la realitat", "Un mapa"], correcta: 2, justificacio: "És una escala d'ampliació." },
+                    { p: "Amb quin instrument mesurem angles amb precisió?", opcions: ["Regle", "Compàs", "Transportador d'angles", "Escaire"], correcta: 2, justificacio: "Permet mesurar i traçar graus." },
+                    { p: "Què és l'acotació?", opcions: ["Pintar la peça", "Posar les mides al plànol", "Dibuixar en 3D", "Signar el dibuix"], correcta: 1, justificacio: "Són les xifres i línies que indiquen dimensions." }
+                ]
+            },
+            {
+                id: 6,
+                titol: "Mecanismes i Transmissió",
+                context: "Estudi del sistema de transmissió d'una bicicleta de muntanya.",
+                preguntes: [
+                    { p: "Si el plat gran té 40 dents i el pinyó 20, quina és la relació?", opcions: ["1:1", "2:1 (Multiplicador)", "1:2 (Reductor)", "4:1"], correcta: 1, justificacio: "40/20 = 2. Per cada volta de pedal, la roda en dóna dues." },
+                    { p: "Quin mecanisme transforma moviment circular en rectilini?", opcions: ["Engranatges", "Politges", "Pinyó-cremallera", "Palanca"], correcta: 2, justificacio: "La cremallera es desplaça en línia recta." },
+                    { p: "En una palanca de primer grau, on és el punt de suport?", opcions: ["A un extrem", "Al mig, entre força i resistència", "A sobre de la càrrega", "No en té"], correcta: 1, justificacio: "Com un balancí." },
+                    { p: "Per què serveix el canvi de marxes?", opcions: ["Per anar més maco", "Per ajustar la força/velocitat segons el terreny", "Per frenar millor", "Per inflar les rodes"], correcta: 1, justificacio: "Modifica la relació de transmissió." },
+                    { p: "Quin esforç suporta la cadena de la bici?", opcions: ["Compressió", "Tracció", "Torsió", "Cizallament"], correcta: 1, justificacio: "La cadena es tensa (s'estira) en pedalar." }
+                ]
+            },
+            {
+                id: 7,
+                titol: "Circuit Elèctric: Llanterna LED",
+                context: "Muntatge d'una llanterna casolana amb una pila, un interruptor i un díode LED.",
+                preguntes: [
+                    { p: "En quina unitat es mesura la diferència de potencial (tensió)?", opcions: ["Ampere (A)", "Volt (V)", "Ohm (Ω)", "Watt (W)"], correcta: 1, justificacio: "El Volt és la unitat de tensió." },
+                    { p: "Què passa si connectem el LED a l'inrevés?", opcions: ["S'encén igual", "Explota la pila", "No s'encén", "Fa llum blava"], correcta: 2, justificacio: "Els LED tenen polaritat i només deixen passar el corrent en un sentit." },
+                    { p: "Segons la Llei d'Ohm, si augmentem la resistència, la intensitat...", opcions: ["Augmenta", "Es manté igual", "Disminueix", "Es torna alterna"], correcta: 2, justificacio: "I = V / R. Són inversament proporcionals." },
+                    { p: "Quina és la funció de la resistència en sèrie amb el LED?", opcions: ["Donar més llum", "Protegir el LED limitant el corrent", "Guardar energia", "Refredar la pila"], correcta: 1, justificacio: "Evita que el LED es cremi per massa intensitat." },
+                    { p: "Si posem dues piles de 1.5V en sèrie, quina tensió total tindrem?", opcions: ["1.5 V", "0 V", "3 V", "4.5 V"], correcta: 2, justificacio: "En sèrie, les tensions se sumen." }
+                ]
+            },
+            {
+                id: 8,
+                titol: "Internet i Seguretat (Ciber)",
+                context: "Ús segur de les xarxes socials i navegació per la xarxa en l'entorn escolar.",
+                preguntes: [
+                    { p: "Quina d'aquestes és una contrasenya segura?", opcions: ["123456", "elmeunom", "T3cn0_2024!", "qwerty"], correcta: 2, justificacio: "Combina majúscules, minúscules, números i símbols." },
+                    { p: "Què és el 'Phishing'?", opcions: ["Un joc de pescar", "Correus falsos per robar dades", "Un virus que esborra fitxers", "Millorar la velocitat de xarxa"], correcta: 1, justificacio: "Engany per obtenir claus o dades bancàries." },
+                    { p: "Què indica el cadenat al costat de la URL (HTTPS)?", opcions: ["Que la web és gratis", "Que la connexió està xifrada/és segura", "Que la web està bloquejada", "Que no hi ha virus"], correcta: 1, justificacio: "Les dades viatgen segures entre el navegador i el servidor." },
+                    { p: "Puc publicar fotos d'altres persones sense permís?", opcions: ["Sí, si som amics", "No, per dret a la imatge i privacitat", "Només si no són lletges", "Sí, a Instagram tot es pot"], correcta: 1, justificacio: "Cal respectar sempre el consentiment." },
+                    { p: "Quina és la funció d'un tallafoc (firewall)?", opcions: ["Apagar l'ordinador si crema", "Controlar el trànsit d'entrada i sortida de la xarxa", "Netejar la pols", "Accelerar el processador"], correcta: 1, justificacio: "Actua com a barrera de seguretat." }
+                ]
+            },
+            {
+                id: 9,
+                titol: "Maquines Eina al Taller",
+                context: "Ús del trepant de columna i la serra de marqueteria per fer un projecte de fusta.",
+                preguntes: [
+                    { p: "Abans de trepar una peça, què hem de fer?", opcions: ["Pintar-la", "Subjectar-la bé amb un gat o mordassa", "Mullar-la", "Res"], correcta: 1, justificacio: "Seguretat: evita que la peça giri i ens talli." },
+                    { p: "Com s'anomena la part del trepant que subjecta la broca?", opcions: ["Mandrí", "Cargol", "Interruptor", "Base"], correcta: 0, justificacio: "El mandrí s'apreta amb una clau per fixar la broca." },
+                    { p: "Quin material s'ha de portar recollit per usar màquines que giren?", opcions: ["Les sabates", "Els cabells llargs", "La motxilla", "El rellotge"], correcta: 1, justificacio: "Evita atrapaments perillosos." },
+                    { p: "Amb quina eina fem un forat guia inicial en fusta?", opcions: ["Xerrac", "Punta de marcar o barrina", "Martell", "Llima"], correcta: 1, justificacio: "Ajuda a que la broca no rellisqui al principi." },
+                    { p: "Què hem de fer en acabar d'usar el taller?", opcions: ["Marxar corrent", "Deixar-ho tot brut", "Recollir eines i netejar el banc de treball", "Menjar"], correcta: 2, justificacio: "L'ordre i la neteja són part de la seguretat." }
+                ]
+            },
+            {
+                id: 10,
+                titol: "Pensament Computacional",
+                context: "Programació d'un robot que ha de seguir una línia negra sense sortir-se'n.",
+                preguntes: [
+                    { p: "Quin sensor necessita el robot per 'veure' la línia?", opcions: ["Ultrasons", "Infrarojos (reflectància)", "Sensor de so", "Giroscopi"], correcta: 1, justificacio: "Detecta la diferència de llum reflectida entre blanc i negre." },
+                    { p: "Si volem que una acció es repeteixi sempre, usem un...", opcions: ["Condicional (SI)", "Bucle (Per sempre/Loop)", "Variable", "Botó"], correcta: 1, justificacio: "Els bucles repeteixen codi indefinidament." },
+                    { p: "Què és un algorisme?", opcions: ["Un número de telèfon", "Una seqüència de passos per resoldre un problema", "Un component electrònic", "Un error de programa"], correcta: 1, justificacio: "Són les instruccions ordenades." },
+                    { p: "Si el robot detecta un obstacle a 10cm i para, què estem usant?", opcions: ["Sensor d'humitat", "Sensor d'ultrasons (distància)", "LDR", "Pila"], correcta: 1, justificacio: "Mesura el temps que triga el so en rebotar." },
+                    { p: "Què és el depuració (debugging)?", opcions: ["Trencar el robot", "Trobar i corregir errors al codi", "Pintar el programa", "Instal·lar Windows"], correcta: 1, justificacio: "És el procés de revisió d'errors." }
+                ]
+            },
+            {
+                id: 11,
+                titol: "Comunicacions: Ràdio i Wi-Fi",
+                context: "Funcionament de les ones electromagnètiques en la transmissió de dades sense fils.",
+                preguntes: [
+                    { p: "Quina unitat mesura la freqüència de les ones?", opcions: ["Metres", "Hertz (Hz)", "Segons", "Lúmens"], correcta: 1, justificacio: "Indica el nombre de cicles per segon." },
+                    { p: "Què és el Bluetooth?", opcions: ["Una malaltia de les dents", "Comunicació sense fils de curt abast", "Un tipus de cable", "Una antena de TV"], correcta: 1, justificacio: "Ideal per connectar auriculars o ratolins." },
+                    { p: "Quin component d'un mòbil rep el senyal?", opcions: ["Pantalla", "Antena", "Bateria", "Càmera"], correcta: 1, justificacio: "Captura les ones electromagnètiques de l'aire." },
+                    { p: "L'espectre electromagnètic inclou...", opcions: ["Només el so", "Llum, ràdio, microones, etc.", "Només l'electricitat", "Res"], correcta: 1, justificacio: "És el conjunt de totes les freqüències." },
+                    { p: "Per què a vegades no arriba el Wi-Fi a tota la casa?", opcions: ["Per les parets i interferències", "Perquè el router està cansat", "Perquè és de nit", "No és possible"], correcta: 0, justificacio: "Els obstacles físics atenuen el senyal." }
+                ]
+            },
+            {
+                id: 12,
+                titol: "Estructures: Grans Construccions",
+                context: "Anàlisi d'un gratacels i com resisteix la força del vent i els terratrèmols.",
+                preguntes: [
+                    { p: "Quina part de l'edifici transmet el pes al terreny?", opcions: ["Teulada", "Fonaments", "Finestres", "Escales"], correcta: 1, justificacio: "Són la base que aguanta tota l'estructura." },
+                    { p: "Quin material aguanta millor la tracció i la compressió alhora?", opcions: ["Fusta", "Formigó armat (amb ferro)", "Vidre", "Maó"], correcta: 1, justificacio: "El ferro aguanta tracció i el formigó compressió." },
+                    { p: "Com s'anomenen les bigues verticals?", opcions: ["Pilars o columnes", "Jàsseres", "Tirants", "Fonaments"], correcta: 0, justificacio: "Sostenen el pes verticalment." },
+                    { p: "Què és un tirant?", opcions: ["Una biga de fusta", "Un element que treballa a tracció (ex. cables)", "Un pilar", "Una paret"], correcta: 1, justificacio: "Molt usat en ponts penjants." },
+                    { p: "Per què els edificis alts tenen oscil·lació?", opcions: ["Perquè estan mal fets", "Per dissipar l'energia del vent", "Perquè la terra és rodona", "No oscil·len"], correcta: 1, justificacio: "La flexibilitat controlada evita que es trenquin." }
+                ]
+            },
+            {
+                id: 13,
+                titol: "Hidràulica i Pneumàtica",
+                context: "Funcionament d'una excavadora o un elevador de cotxes en un taller.",
+                preguntes: [
+                    { p: "Quin fluid usa la pneumàtica?", opcions: ["Aigua", "Oli", "Aire comprimit", "Gasolina"], correcta: 2, justificacio: "L'aire és el fluid de treball." },
+                    { p: "Quina és la propietat principal dels líquids en hidràulica?", opcions: ["Són fàcils de comprimir", "Són incompressibles", "No pesen", "Són sòlids"], correcta: 1, justificacio: "Això permet transmetre pressió i força amb precisió." },
+                    { p: "Quin component genera la pressió en pneumàtica?", opcions: ["Motor", "Compressor", "Vàlvula", "Cilindre"], correcta: 1, justificacio: "Agafa aire i el comprimeix en un dipòsit." },
+                    { p: "Què fa un cilindre d'efecte simple?", opcions: ["Surt i entra amb aire", "Només surt amb aire (torna amb molla)", "Gira", "Escalfa"], correcta: 1, justificacio: "Només treballa en un sentit." },
+                    { p: "On trobem hidràulica normalment?", opcions: ["En un rellotge", "En els frens d'un cotxe", "En un ventilador", "En un comandament de TV"], correcta: 1, justificacio: "El líquid de frens transmet la força del peu a les rodes." }
+                ]
+            },
+            {
+                id: 14,
+                titol: "Impressió 3D i Fabricació Digital",
+                context: "Disseny i fabricació d'una peça de recanvi que s'ha trencat a l'escola.",
+                preguntes: [
+                    { p: "Quin és el format de fitxer estàndard per a impressió 3D?", opcions: ["MP3", "STL", "JPG", "DOCX"], correcta: 1, justificacio: "Representa la geometria de la superfície en triangles." },
+                    { p: "Com s'anomena el plàstic més comú d'origen vegetal per a 3D?", opcions: ["PVC", "PLA", "ABS", "PETG"], correcta: 1, justificacio: "L'àcid polilàctic (PLA) és biodegradable i fàcil d'imprimir." },
+                    { p: "Quin programari passa del model 3D a instruccions per la màquina?", opcions: ["Paint", "Laminador (Slicer)", "Excel", "Antivirus"], correcta: 1, justificacio: "Talla l'objecte en capes (ex. Cura)." },
+                    { p: "Què és la fabricació additiva?", opcions: ["Treure material d'un bloc", "Afegir material capa a capa", "Pintar", "Modelar amb fang"], correcta: 1, justificacio: "És la base de la impressió 3D." },
+                    { p: "Què és el farciment (infill)?", opcions: ["El color de fora", "L'estructura interna de la peça", "El suport", "La base"], correcta: 1, justificacio: "Determina la resistència i el pes de la peça." }
+                ]
+            },
+            {
+                id: 15,
+                titol: "Electrònica: Components",
+                context: "Identificació de components en una placa de circuit imprès (PCB).",
+                preguntes: [
+                    { p: "Què mesura un multímetre en posició 'Ω'?", opcions: ["Tensió", "Intensitat", "Resistència", "Capacitat"], correcta: 2, justificacio: "L'Ohm mesura l'oposició al pas del corrent." },
+                    { p: "Quin component emmagatzema energia elèctrica temporalment?", opcions: ["Resistència", "Díode", "Condensador", "Pulsador"], correcta: 2, justificacio: "Funciona com una petita bateria de càrrega ràpida." },
+                    { p: "Quina és la funció d'un transistor?", opcions: ["Només escalfar", "Interruptor electrònic o amplificador", "Fer llum", "Tallar el corrent"], correcta: 1, justificacio: "Component clau de tota l'electrònica moderna." },
+                    { p: "Un LDR varia la seva resistència segons...", opcions: ["La temperatura", "La llum que rep", "La humitat", "El temps"], correcta: 1, justificacio: "Light Dependent Resistor." },
+                    { p: "Què fa un díode?", opcions: ["Deixa passar el corrent en ambdós sentits", "Deixa passar el corrent en un sol sentit", "Augmenta la tensió", "No fa res"], correcta: 1, justificacio: "Actua com una vàlvula antiretorn." }
+                ]
+            },
+            {
+                id: 16,
+                titol: "Sistemes de So",
+                context: "Muntatge d'un equip de so per a una festa de final de curs.",
+                preguntes: [
+                    { p: "Quina és la funció de l'amplificador?", opcions: ["Gravar el so", "Augmentar la potència del senyal", "Escoltar música", "Fer silenci"], correcta: 1, justificacio: "Agafa un senyal feble i el fa fort per als altaveus." },
+                    { p: "Què és un micròfon?", opcions: ["Un actuador", "Un transductor d'entrada (so a electricitat)", "Un motor", "Una bateria"], correcta: 1, justificacio: "Converteix ones sonores en senyals elèctrics." },
+                    { p: "Quin format d'àudio té pèrdua de qualitat per ocupar menys?", opcions: ["WAV", "MP3", "FLAC", "CDA"], correcta: 1, justificacio: "Comprimeix el so eliminant freqüències poc audibles." },
+                    { p: "Què mesura els Decibels (dB)?", opcions: ["La freqüència", "La intensitat o volum del so", "La velocitat", "El preu"], correcta: 1, justificacio: "Unitat de pressió sonora." },
+                    { p: "Què és un 'feedback' o acoblament (pitonissa)?", opcions: ["Quan el so de l'altaveu torna a entrar pel micro", "Quan s'apaga tot", "Quan el so és molt bonic", "Un tipus de ball"], correcta: 0, justificacio: "Crea un soroll agut i molest." }
+                ]
+            },
+            {
+                id: 17,
+                titol: "Manteniment i Reparació",
+                context: "Diagnòstic de per què un aparell elèctric ha deixat de funcionar.",
+                preguntes: [
+                    { p: "Quina és la 'regla d'or' abans de reparar res elèctric?", opcions: ["Parlar amb el client", "Desconnectar de la xarxa elèctrica", "Obrir-ho ràpid", "Mullar-ho"], correcta: 1, justificacio: "Seguretat vital per evitar electrocucions." },
+                    { p: "Com comprovem si un cable està tallat per dins?", opcions: ["Mirant-lo fort", "Mesurant continuïtat amb el multímetre", "Olorant-lo", "Pesant-lo"], correcta: 1, justificacio: "Si no pita (continuïtat), el cable està trencat." },
+                    { p: "Què indica un fusible cremat?", opcions: ["Que cal més potència", "Que hi ha hagut un sobreconsum o curtcircuit", "Que l'aparell és nou", "Res"], correcta: 1, justificacio: "El fusible es sacrifica per protegir la resta del circuit." },
+                    { p: "Per què s'escalfen els ordinadors?", opcions: ["Efecte Joule i falta de ventilació", "Perquè estan contents", "Per la pantalla", "No s'escalfen"], correcta: 0, justificacio: "El pas del corrent genera calor." },
+                    { p: "Què hem de fer amb una bateria inflada?", opcions: ["Punxar-la", "Seguir-la usant", "Portar-la immediatament a un punt net", "Llençar-la a les brossa normal"], correcta: 2, justificacio: "És perillosa i pot explotar o cremar." }
+                ]
+            },
+            {
+                id: 18,
+                titol: "Processos de Fabricació",
+                context: "Passos per fabricar una prestatgeria metàl·lica en una petita empresa.",
+                preguntes: [
+                    { p: "Quin procés uneix dues peces de metall fonent material?", opcions: ["Enganxar", "Soldadura", "Clavar", "Cargolar"], correcta: 1, justificacio: "Crea una unió fixa i molt resistent." },
+                    { p: "Com s'anomena l'acabat que evita que el ferro s'oxidi?", opcions: ["Pintura o galvanitzat", "Serrat", "Poliment", "Llimat"], correcta: 0, justificacio: "Protegeix el metall de la intempèrie." },
+                    { p: "Quina eina serveix per tallar planxa fina de metall?", opcions: ["Tisores de xapa", "Xerrac de fusta", "Tisores de paper", "Ganivet"], correcta: 0, justificacio: "Dissenyades especialment per a metalls tous i fins." },
+                    { p: "Què és un motlle?", opcions: ["Una eina de tall", "Un recipient per donar forma a un material fos", "Un dibuix", "Una màquina"], correcta: 1, justificacio: "Molt usat en plàstics i fosa de metalls." },
+                    { p: "Què és el control de qualitat?", opcions: ["Vendre car", "Verificar que el producte no té defectes", "Fer publicitat", "Pintar la caixa"], correcta: 1, justificacio: "Assegura que l'usuari rep el que toca." }
+                ]
+            },
+            {
+                id: 19,
+                titol: "Disseny Assistit (CAD)",
+                context: "Ús de programari (com SketchUp o Tinkercad) per dissenyar un objecte.",
+                preguntes: [
+                    { p: "Què significa l'eix Z en un programa 3D?", opcions: ["Ample", "Llarg", "Alçada / Profunditat", "Color"], correcta: 2, justificacio: "X i Y són el pla, Z és la tercera dimensió." },
+                    { p: "Què és l'extrusió?", opcions: ["Esborrar una cara", "Donar volum a una figura 2D", "Pintar", "Moure l'objecte"], correcta: 1, justificacio: "Fer créixer un quadrat per convertir-lo en un cub." },
+                    { p: "Per què serveix la funció 'Agrupar'?", opcions: ["Per esborrar", "Per moure diverses peces com si fossin una", "Per canviar el nom", "Per imprimir"], correcta: 1, justificacio: "Facilita l'organització del disseny complex." },
+                    { p: "Què és el renderitzat?", opcions: ["Dibuixar amb llapis", "Generar una imatge realista amb llums i ombres", "Imprimir en paper", "Instal·lar el programa"], correcta: 1, justificacio: "És el resultat visual final 'foto-realista'." },
+                    { p: "Què permet la funció 'Simetria'?", opcions: ["Fer la peça més gran", "Crear una còpia especular (mirall)", "Canviar el material", "Girar 10 graus"], correcta: 1, justificacio: "Estalvia temps si l'objecte és igual a les dues bandes." }
+                ]
+            },
+            {
+                id: 20,
+                titol: "Presentació de Projectes",
+                context: "Preparació de la memòria tècnica i la presentació oral del projecte de curs.",
+                preguntes: [
+                    { p: "Quina part de la memòria explica els passos seguits?", opcions: ["Pressupost", "Plànols", "Procés de fabricació (full de ruta)", "Portada"], correcta: 2, justificacio: "Descriu què s'ha fet cada dia." },
+                    { p: "Què s'ha d'incloure en el pressupost?", opcions: ["Només els materials", "Materials, eines, mà d'obra i impostos", "Fotos", "Opinió personal"], correcta: 1, justificacio: "Ha de reflectir el cost real total." },
+                    { p: "Com han de ser les diapositives d'una presentació?", opcions: ["Amb moltíssim text", "Visuals, amb poc text i idees clares", "Totes blanques", "Sense imatges"], correcta: 1, justificacio: "Han de servir de suport, no per ser llegides." },
+                    { p: "Què és l'autoavaluació?", opcions: ["Posar nota als companys", "Analitzar críticament el propi treball", "Demanar la nota al profe", "No fer res"], correcta: 1, justificacio: "Ajuda a aprendre dels propis errors." },
+                    { p: "Per què fem un prototip?", opcions: ["Per perdre el temps", "Per provar si el disseny funciona abans de fer el real", "Perquè és bonic", "Per gastar material"], correcta: 1, justificacio: "Valida la idea inicial de forma barata." }
+                ]
+            },
+            {
+                id: 21,
+                titol: "Impacte Tecnològic i Societat",
+                context: "Debat sobre com la intel·ligència artificial i l'automatització canvien el món laboral.",
+                preguntes: [
+                    { p: "Què és l'obsolescència programada?", opcions: ["Aparells que duren sempre", "Productes dissenyats per fallar al cap d'un temps", "Actualitzacions de software", "Reciclatge"], correcta: 1, justificacio: "Fomenta el consumisme i genera residus." },
+                    { p: "Què és la bretxa digital?", opcions: ["Un forat a l'ordinador", "La desigualtat en l'accés a la tecnologia", "La velocitat de baixada", "Un tipus de virus"], correcta: 1, justificacio: "No tothom té els mateixos recursos o coneixements." },
+                    { p: "Quin és un benefici de l'automatització industrial?", opcions: ["Més accidents", "Major precisió i seguretat en tasques perilloses", "Productes més cars", "Menys oci"], correcta: 1, justificacio: "Les màquines fan les feines més dures o repetitives." },
+                    { p: "Què és el programari lliure (Open Source)?", opcions: ["Software que es pot veure, modificar i compartir", "Software gratis però prohibit copiar", "Software pirata", "Software sense virus"], correcta: 0, justificacio: "Exemples com Linux o LibreOffice." },
+                    { p: "Quina actitud hem de tenir davant de les noves tecnologies?", opcions: ["Por i rebuig", "Crítica, responsable i d'aprenentatge continu", "Acceptar-ho tot sense pensar", "No usar-les"], correcta: 1, justificacio: "Cal ser conscients dels avantatges i riscos." }
+                ]
+            },
+            {
+                id: 22,
+                titol: "Seguretat i Higiene al Treball",
+                context: "Senyalització i normes en un entorn industrial o de taller.",
+                preguntes: [
+                    { p: "De quin color són els senyals d'obligació?", opcions: ["Vermells", "Grocs", "Blaus", "Verds"], correcta: 2, justificacio: "Cercle blau amb dibuix blanc (ex. Ús obligatori de guants)." },
+                    { p: "Un triangle groc amb vora negra indica...", opcions: ["Prohibició", "Advertència de perill", "Informació", "Obligació"], correcta: 1, justificacio: "Ex. Perill elèctric o inflamable." },
+                    { p: "Què signifiquen les sigles EPI?", opcions: ["Equip de Protecció Individual", "Eines Per Inventar", "Estudi de Projectes Industrials", "Res"], correcta: 0, justificacio: "Casc, guants, botes, etc." },
+                    { p: "Què indica un senyal verd quadrat o rectangular?", opcions: ["Perill", "Salvament o socors (Sortida d'emergència)", "Prohibit passar", "Foc"], correcta: 1, justificacio: "Indica camins segurs o equips d'ajuda." },
+                    { p: "Què és el primer que cal fer en cas d'accident greu?", opcions: ["Seguir treballant", "Avisar el professor i seguir el protocol PAS (Protegir, Avisar, Socórrer)", "Gravar un vídeo", "Marxar a casa"], correcta: 1, justificacio: "És el protocol estàndard d'emergències." }
+                ]
+            }
+        ];
+
+        const grid = document.getElementById('activities-grid');
+        const selectorScreen = document.getElementById('selector-screen');
+        const activityScreen = document.getElementById('activity-screen');
+        const container = document.getElementById('activity-container');
+
+        // Generar Selector
+        function init() {
+            activitats.forEach(act => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-xl border border-slate-200 hover:border-blue-500 hover:shadow-lg cursor-pointer transition-all group relative overflow-hidden";
+                card.onclick = () => loadActivity(act.id);
+                card.innerHTML = `
+                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg">BLOC ${act.id}</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">${act.titol}</h3>
+                    <p class="text-slate-500 text-sm leading-snug line-clamp-3">${act.context}</p>
+                    <div class="mt-4 flex items-center text-blue-600 font-semibold text-xs uppercase tracking-widest">
+                        Començar Entrenament
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Carregar activitat específica
+        function loadActivity(id) {
+            const act = activitats.find(a => a.id === id);
+            selectorScreen.classList.add('hidden');
+            activityScreen.classList.remove('hidden');
+            window.scrollTo(0, 0);
+
+            let html = `
+                <div class="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 border-b border-blue-100">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="bg-blue-600 text-white text-xs font-black px-2 py-1 rounded">BLOC ${act.id}</span>
+                        <h2 class="text-3xl font-bold text-slate-900">${act.titol}</h2>
+                    </div>
+                    <div class="mt-4 p-5 bg-white rounded-xl shadow-sm border border-blue-200 text-slate-700 leading-relaxed relative">
+                        <svg class="absolute -top-3 -left-3 h-8 w-8 text-blue-200" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C14.9124 8 14.017 7.10457 14.017 6V3L14.017 3C14.017 1.89543 14.9124 1 16.017 1H19.017C21.2261 1 23.017 2.79086 23.017 5V15C23.017 17.2091 21.2261 19 19.017 19H16.017C15.4647 19 15.017 19.4477 15.017 20V21L14.017 21ZM1 21L1 18C1 16.8954 1.89543 16 3 16H6C6.55228 16 7 15.5523 7 15V9C7 8.44772 6.55228 8 6 8H3C1.89543 8 1 7.10457 1 6V3L1 3C1 1.89543 1.89543 1 3 1H6C8.20914 1 10 2.79086 10 5V15C10 17.2091 8.20914 19 6 19H3C2.44772 19 2 19.4477 2 20V21L1 21Z" /></svg>
+                        <p class="relative z-10 pl-4">${act.context}</p>
+                    </div>
+                </div>
+                <div class="p-8 space-y-12">
+            `;
+
+            act.preguntes.forEach((pregunta, pIdx) => {
+                html += `
+                    <div class="question-container" id="container-${pIdx}">
+                        <h3 class="text-lg font-bold text-slate-800 mb-5 flex items-start">
+                            <span class="bg-slate-800 text-white w-7 h-7 rounded-full flex items-center justify-center text-sm mr-3 flex-shrink-0 mt-0.5">${pIdx + 1}</span>
+                            ${pregunta.p}
+                        </h3>
+                        <div class="grid gap-3 ml-10">
+                            ${pregunta.opcions.map((opt, oIdx) => `
+                                <button onclick="handleAnswer(${id}, ${pIdx}, ${oIdx})" 
+                                        class="option-btn group flex items-center text-left p-4 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-all">
+                                    <div class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center mr-4 group-hover:border-blue-500 font-bold text-xs uppercase text-slate-400 group-hover:text-blue-600">
+                                        ${String.fromCharCode(97 + oIdx)}
+                                    </div>
+                                    <span class="text-slate-700 font-medium">${opt}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div id="feedback-${pIdx}" class="hidden ml-10 mt-5 p-5 rounded-xl border-l-8 animate-in slide-in-from-top-2 duration-300">
+                            <div class="flex items-center mb-2">
+                                <span id="icon-${pIdx}" class="mr-2 text-xl"></span>
+                                <strong id="status-${pIdx}" class="text-lg"></strong>
+                            </div>
+                            <p class="text-slate-800 italic bg-white/50 p-3 rounded-lg border border-black/5">${pregunta.justificacio}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="mt-12 p-8 bg-slate-50 border-t border-slate-200 text-center">
+                    <button onclick="showSelector()" class="bg-slate-800 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-900 transition-colors shadow-lg">
+                        He acabat aquest bloc
+                    </button>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        window.handleAnswer = function(actId, pIdx, oIdx) {
+            const act = activitats.find(a => a.id === actId);
+            const pregunta = act.preguntes[pIdx];
+            const feedback = document.getElementById(`feedback-${pIdx}`);
+            const status = document.getElementById(`status-${pIdx}`);
+            const icon = document.getElementById(`icon-${pIdx}`);
+            const buttons = document.querySelectorAll(`#container-${pIdx} .option-btn`);
+
+            // Bloquejar botons
+            buttons.forEach(b => b.disabled = true);
+
+            feedback.classList.remove('hidden');
+            
+            if (oIdx === pregunta.correcta) {
+                feedback.className = "ml-10 mt-5 p-5 rounded-xl border-l-8 correct animate-bounce-short";
+                status.innerText = "Molt bé! Resposta correcta.";
+                icon.innerText = "🎯";
+                buttons[oIdx].classList.add('correct', 'border-2', 'ring-2', 'ring-emerald-200');
+            } else {
+                feedback.className = "ml-10 mt-5 p-5 rounded-xl border-l-8 incorrect";
+                status.innerText = "Ho sentim, no és correcte.";
+                icon.innerText = "💡";
+                buttons[oIdx].classList.add('incorrect', 'border-2', 'ring-2', 'ring-red-200');
+                buttons[pregunta.correcta].classList.add('correct', 'border-2', 'opacity-90');
+            }
+        };
+
+        window.showSelector = function() {
+            selectorScreen.classList.remove('hidden');
+            activityScreen.classList.add('hidden');
+            window.scrollTo(0,0);
+        }
+
+        init();
+    </script>
+    <style>
+        @keyframes bounce-short {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .animate-bounce-short {
+            animation: bounce-short 0.4s ease-in-out;
+        }
+    </style>
+</body>
+</html>
